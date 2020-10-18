@@ -45,7 +45,7 @@ class MarkovChain:
         self.SetInitState(initState)
 
     def SetProbMatrix(self,iMat):
-        if iMat == None:
+        if isinstance(iMat,type( None )):
             print ( 'Initialised with no probability matrix.')
             self.ProbMatrix = None
         else:
@@ -99,18 +99,15 @@ class MarkovChain:
         result = np.zeros(len(consts))
         for a in constTimesEigvec:
             result = result + a
-        return result
+        return np.real(result)
 
     def StationaryState(self):
         consts, eigVals, eigVecs = self.Evaluation
-        vecs = []
+
         for e in range(len(eigVals)):
             if eigVals[e] == 1:
-                vecs.append(consts[e] * n for n in eigVecs[e])
-        ToReturn = vecs[0]
-        for v in vecs[1:]:
-            ToReturn = [x+y for x,y in zip(ToReturn,v)]
-        return [x/sum(ToReturn) for x in ToReturn]
+                toReturn = np.real(consts[e])*np.array(eigVecs[e])
+        return np.real(toReturn)
 
     def PrintStateAtTime(self):
         consts, eigVals, eigVecs = self.Evaluation
