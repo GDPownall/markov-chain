@@ -12,6 +12,7 @@
 \begin{abstract}
 	The following decribes what a Markov chain is and how the state of a Markov Chain system is computed at any time step in such a way as to reduce the computational time by multiple orders of magnitude and extrapolate to infinity iterations with just one computation.
 The Gambler's Ruin and Monopoly games are presented as examples of use cases, and follow expected patterns of behaviour. 
+The PageRank algorithm is also described.
 \end{abstract}
 
 \section{Markov Chain computation}
@@ -144,5 +145,12 @@ The stationary state of the monopoly board is visualised in Fig. \ref{fig:monopo
 \end{figure}
 
 There are notable peaks and troughs. Peaks are at the positions of the ``advance to'' locations, and troughs are at the chance and community chest locations themselves. The biggest peak, however, is for the jail location, and a trough at the ``go to jail'' square as this is treated as a square that you cannot land on -- it sends you straight to the jail cell. The shape of the distribution follows a wave, with upward parts following the peaks, particularly after the jail location.
+
+\subsection{PageRank}
+
+One of the first algorithms used by the Google search engine was PageRank, which in its most simple form made use of Markov Chain analysis.
+Essentially, given a list of links, and the hyperlinks to the other pages contained within, how do you rank them?
+This algorithm builds a Markov Chain system where the probability of moving to another page is split equally into the hyperlinks, and the stationary state determines the ranking used for the search page.
+The function to compute this is given in the PageRankExample.py script.
 
 \end{document}
