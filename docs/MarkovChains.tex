@@ -10,7 +10,8 @@
 \maketitle
 
 \begin{abstract}
-The following decribes what a Markov chain is and how the state of a Markov Chain system is computed at any time step.
+	The following decribes what a Markov chain is and how the state of a Markov Chain system is computed at any time step in such a way as to reduce the computational time by multiple orders of magnitude and extrapolate to infinity iterations with just one computation.
+The Gambler's Ruin and Monopoly games are presented as examples of use cases, and follow expected patterns of behaviour. 
 \end{abstract}
 
 \section{Markov Chain computation}
@@ -129,7 +130,7 @@ This can be solved using an iterative derivation. For example, for a fair coin t
 Using Markov chains, not only can this be calculated computationally, but you can also calculate the probability of the gambler having a certain number of coins at any time step. See GamblersRuin.py for more details.
 
 The ``GamblerRuin.gif'' file shows evolution of a state with time, where the gambler starts on 4 coins and cashes out at 10. 
-The patterns observed are as expected - the 0\th iteration is a simple peak, the 1\st iteration is two peaks either side that of the 0\th iteration, and evolution follows that pattern as the probability slowly concentrates itself at 0 and 10.
+The patterns observed are as expected - the 0th iteration is a simple peak, the 1st iteration is two peaks either side that of the 0th iteration, and evolution follows that pattern as the probability slowly concentrates itself at 0 and 10.
 
 \subsection{Monopoly}
 
