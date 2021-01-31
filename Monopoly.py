@@ -13,14 +13,22 @@ class Monopoly:
                 if n+m < 40: prob_mat[n+m][n]    = dice_roll_prob(m)
                 else:        prob_mat[n+m-40][n] = dice_roll_prob(m)
 
+        # Roll three doubles (probability 1/6**3), go to jail
+        for n in range(40):
+            prob_mat[10][n] += (1/6)**3
+            for m in range(40):
+                prob_mat[m][n] *= (1-(1/6)**3)
+
         # Go to jail square
+        # Unoptimised second loop because this is a relatively short loop anyway
         for n in range(40):
             prob_mat[10][n] += prob_mat[30][n]
             prob_mat[30][n] = 0
+
         # Chance cards 
         n_chance = 16
         chance_locs     = [2,7,17,22,36]
-        chance_advances = [0, 24, 11]
+        chance_advances = [0, 24, 11, 10]
         for n in range(40):
             for chance in chance_locs:
                 for advance in chance_advances:

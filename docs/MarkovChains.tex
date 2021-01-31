@@ -128,9 +128,12 @@ This can be solved using an iterative derivation. For example, for a fair coin t
 \end{equation}
 Using Markov chains, not only can this be calculated computationally, but you can also calculate the probability of the gambler having a certain number of coins at any time step. See GamblersRuin.py for more details.
 
+The ``GamblerRuin.gif'' file shows evolution of a state with time, where the gambler starts on 4 coins and cashes out at 10. 
+The patterns observed are as expected - the 0\th iteration is a simple peak, the 1\st iteration is two peaks either side that of the 0\th iteration, and evolution follows that pattern as the probability slowly concentrates itself at 0 and 10.
+
 \subsection{Monopoly}
 
-The monopoly game can also be simulated using Markov chain analysis. In the Monopoly.py script, a simple setup is created with dice rolls and chance/community chest ``advance to'' cards accounted for. The stationary state gives the optimal position for properties. 
+The monopoly game can also be simulated using Markov chain analysis. In the Monopoly.py script, a simple setup is created with dice rolls, chance/community chest ``advance to'' cards and ``go to jail for three doubles in a row'' accounted for. The stationary state gives the optimal position for properties. 
 As has been observed elsewhere, the jail square is the most likely, followed by those around 7 squared afterward.
 The stationary state of the monopoly board is visualised in Fig. \ref{fig:monopoly}.
 
@@ -138,5 +141,7 @@ The stationary state of the monopoly board is visualised in Fig. \ref{fig:monopo
 	\centering
 	\includegraphics[width=0.6\textwidth]{MonopolyStationary.png}
 \end{figure}
+
+There are notable peaks and troughs. Peaks are at the positions of the ``advance to'' chance/community chest locations, and troughs are at the chance and community chest locations. The biggest peak, however, is for the jail location, and a trough at the ``go to jail'' square as this is treated as a square that you cannot land on -- it sends you straight to the jail cell. The shape of the distribution follows a wave, with upward parts following the peaks, particularly after the jail location.
 
 \end{document}
