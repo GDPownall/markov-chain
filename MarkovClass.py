@@ -55,7 +55,8 @@ class MarkovChain:
                 raise MarkovError
             for colNum in range(len(iMat)):
                 column = iMat[:,colNum]
-                if sum(column) != 1.:
+                if (sum(column) - 1.)**2 > 0.000001:
+                    print(sum(column))
                     raise ValueError('Matrix column at position '+str(colNum)+' does not sum to one.')
             self.ProbMatrix = np.array(iMat)
             self.probMatrixSet = True
