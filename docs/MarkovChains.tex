@@ -135,7 +135,7 @@ The patterns observed are as expected - the 0th iteration is a simple peak, the 
 \subsection{Monopoly}
 
 The monopoly game can also be simulated using Markov chain analysis. In the Monopoly.py script, a simple setup is created with dice rolls, chance/community chest ``advance to'' cards and ``go to jail for three doubles in a row'' accounted for. The stationary state gives the optimal position for properties. 
-As has been observed elsewhere, the jail square is the most likely, followed by those around 7 squared afterward.
+As has been observed elsewhere, the jail square is the most likely, followed by those around 7 squares afterward.
 The stationary state of the monopoly board is visualised in Fig. \ref{fig:monopoly}.
 
 \begin{figure}\label{fig:monopoly}
@@ -143,6 +143,6 @@ The stationary state of the monopoly board is visualised in Fig. \ref{fig:monopo
 	\includegraphics[width=0.6\textwidth]{MonopolyStationary.png}
 \end{figure}
 
-There are notable peaks and troughs. Peaks are at the positions of the ``advance to'' chance/community chest locations, and troughs are at the chance and community chest locations. The biggest peak, however, is for the jail location, and a trough at the ``go to jail'' square as this is treated as a square that you cannot land on -- it sends you straight to the jail cell. The shape of the distribution follows a wave, with upward parts following the peaks, particularly after the jail location.
+There are notable peaks and troughs. Peaks are at the positions of the ``advance to'' locations, and troughs are at the chance and community chest locations themselves. The biggest peak, however, is for the jail location, and a trough at the ``go to jail'' square as this is treated as a square that you cannot land on -- it sends you straight to the jail cell. The shape of the distribution follows a wave, with upward parts following the peaks, particularly after the jail location.
 
 \end{document}
