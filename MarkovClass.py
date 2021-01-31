@@ -29,12 +29,8 @@ The class is called as MarkovChain(probMatrix,initialState)
 '''
 
 import numpy as np
-
-class Error(Exception):
-    pass
-
-class MarkovError(Error):
-    pass
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
 class MarkovChain:
     def __init__(self, probMatrix=None, initState=None):
@@ -100,7 +96,7 @@ class MarkovChain:
         a = consts*eigVals**t        
         result = np.zeros(eigVecs.shape[0])
         for i in range(len(consts)):
-            result += consts[i]*(eigVals[i]**t)*eigVecs[i,:]
+            result += np.real(consts[i]*(eigVals[i]**t)*eigVecs[i,:])
         return result
 
     def StationaryState(self):
@@ -116,6 +112,29 @@ class MarkovChain:
         for c, eigVal, eigVec in zip(consts, eigVals, eigVecs):
             result .append( str(c)+'*('+str(eigVal)+'^t)*'+str(eigVec)+' ' )
         print ('P(t) = '+'\n+'.join(result))
+
+    def PlotStationary(self, outfile = 'out.pdf'):
+        stationary = self.StationaryState()
+        fig, ax = plt.subplots()
+        fig.set_tight_layout(True)
+        line = ax.plot(range(len(stationary)),stationary,linewidth=2)
+        fig.savefig(outfile)
+
+    def PlotOverTime(self, outfile='out.gif', timesteps=20, start_from = 0):
+        fig, ax = plt.subplots()
+        print('fig size: {0} DPI, size in inches {1}'.format(
+            fig.get_dpi(), fig.get_size_inches()))
+        x = range(len(self.Evaluation[0]))
+        y = self.CalcStateAtTime(start_from)
+        line, = ax.plot(x,y,linewidth=2)
+        def update(i):
+            label = 'timestep {0}'.format(i)
+            line.set_ydata(self.CalcStateAtTime(i))
+            ax.set_xlabel(label)
+            return line,ax
+        anim = FuncAnimation(fig, update, frames=np.arange(start_from,timesteps), interval=200)
+        #plt.show()
+        anim.save(outfile, dpi=100, writer='imagemagick')
 
 if __name__ == '__main__':
     #Example

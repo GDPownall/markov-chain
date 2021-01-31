@@ -29,9 +29,10 @@ def GetGamblersRuin(initialState=100, probUp = 0.5, probDown = 0.5, upperLimit =
 
 
 if __name__ == '__main__':   
-    x = GetGamblersRuin(2,0.5,0.5,4,0)
+    x = GetGamblersRuin(4,0.5,0.5,10,0)
     print (x.StationaryState())
     x.PrintStateAtTime()
     print('\n')
     for t in range(10):
         print(x.CalcStateAtTime(t))
+    x.PlotOverTime('docs/GamblerRuin.gif',100)

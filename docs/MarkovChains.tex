@@ -115,6 +115,8 @@ There are clearly issues with floating point errors, but these come directly fro
 
 \section{Example usages}
 
+Python scripts are available for both of the below examples, as well as gifs showing the state over time.
+
 \subsection{Gambler's ruin}
 
 The Gambler's ruin problem is well known. 
@@ -122,7 +124,7 @@ Given a starting value, x, a value at which the gambler would ``cash out'', y, a
 
 This can be solved using an iterative derivation. For example, for a fair coin the probability of ending penniless is:
 \begin{equation}
-	P = \frac{x/y}.
+	P = \frac{x}{y}.
 \end{equation}
 Using Markov chains, not only can this be calculated computationally, but you can also calculate the probability of the gambler having a certain number of coins at any time step. See GamblersRuin.py for more details.
 
@@ -130,5 +132,11 @@ Using Markov chains, not only can this be calculated computationally, but you ca
 
 The monopoly game can also be simulated using Markov chain analysis. In the Monopoly.py script, a simple setup is created with dice rolls and chance/community chest ``advance to'' cards accounted for. The stationary state gives the optimal position for properties. 
 As has been observed elsewhere, the jail square is the most likely, followed by those around 7 squared afterward.
+The stationary state of the monopoly board is visualised in Fig. \ref{fig:monopoly}.
+
+\begin{figure}\label{fig:monopoly}
+	\centering
+	\includegraphics[width=0.6\textwidth]{MonopolyStationary.png}
+\end{figure}
 
 \end{document}

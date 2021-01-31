@@ -33,7 +33,8 @@ class Monopoly:
         self.markov = MarkovChain(prob_mat,initial_state)
 
         print(self.markov.StationaryState())
-
+        self.markov.PlotStationary('docs/MonopolyStationary.png')
+        self.markov.PlotOverTime('docs/MonopolyOverTime.gif',100, start_from = 1)
 
 
 
