@@ -56,8 +56,7 @@ class MarkovChain:
             for colNum in range(len(iMat)):
                 column = iMat[:,colNum]
                 if sum(column) != 1.:
-                    print ('Matrix column ',colNum,' does not sum to one')
-                    raise MarkovError
+                    raise ValueError('Matrix column at position '+str(colNum)+' does not sum to one.')
             self.ProbMatrix = np.array(iMat)
             self.probMatrixSet = True
         if self.probMatrixSet and self.initStateSet: self.Evaluate()
@@ -68,45 +67,46 @@ class MarkovChain:
             self.initState = None
         else:
             if sum(initState) != 1.:
-                print ('Initial state needs to add to one')
-                raise MarkovError
-            self.initState = initState
+                raise ValueError('Initial state needs to sum to one')
+            self.initState = np.array(initState)
             self.initStateSet = True
         if self.probMatrixSet and self.initStateSet: self.Evaluate()
 
     def Evaluate(self):
         eigVals, eigVecs = np.linalg.eig(self.ProbMatrix)
-        #eigVecs returned by this function are columns, not rows
-        eigVecs = [eigVecs[:,i] for i in range(len(eigVecs))]
-        #First component 1 for each eigenvector, for readability
-        for e in range(len(eigVecs)):
-            #Find first non-zero element
-            nonZeroElement = 0
-            for i in range(len(eigVecs[e])):
-                if eigVecs[e][i] != 0.:
-                    nonZeroElement = i
-                    break
-            eigVecs[e] = [elem/eigVecs[e][nonZeroElement] for elem in eigVecs[e]]       
-        #c = inv(eigVecs) * initState        
-        consts = np.linalg.inv(eigVecs).transpose().dot(self.initState)
+        # Sort eigenvalues and associate vectors
+        idx = eigVals.argsort()[::-1]
+        eigVals = eigVals[idx]
+        eigVecs = eigVecs[:,idx]
+        eigVecs = eigVecs.transpose()        
+        consts = self.initState.dot(np.linalg.inv(eigVecs))
+        self.Evaluation = consts, eigVals, eigVecs
+        self.RenormEigvecs()
+
+    def RenormEigvecs(self):
+        consts, eigVals, eigVecs = self.Evaluation
+        # Find renorm values. Not as simple as just finding max, has to deal with negative numbers too.
+        maxmin = np.array([np.max(eigVecs,axis=1),np.min(eigVecs,axis=1)])
+        take_val = np.argmax(np.abs(maxmin),axis=0)
+        renorms = maxmin[take_val, range(maxmin.shape[1])] 
+        # Now renormalise
+        eigVecs = (eigVecs.T*1./renorms).T
+        consts = self.initState.dot(np.linalg.inv(eigVecs))
         self.Evaluation = consts, eigVals, eigVecs
 
     def CalcStateAtTime(self,t):
         consts, eigVals, eigVecs = self.Evaluation
-        constTimesEigvec = []
-        for c, eigVal, eigVec in zip(consts, eigVals, eigVecs):
-            constTimesEigvec.append([c*(eigVal**t)*v for v in eigVec])
-        result = np.zeros(len(consts))
-        for a in constTimesEigvec:
-            result = result + a
-        return np.real(result)
+        a = consts*eigVals**t        
+        result = np.zeros(eigVecs.shape[0])
+        for i in range(len(consts)):
+            result += consts[i]*(eigVals[i]**t)*eigVecs[i,:]
+        return result
 
     def StationaryState(self):
         consts, eigVals, eigVecs = self.Evaluation
 
-        for e in range(len(eigVals)):
-            if eigVals[e] == 1:
-                toReturn = np.real(consts[e])*np.array(eigVecs[e])
+        e = np.argmin(np.abs(eigVals-1))
+        toReturn = consts[e]*np.array(eigVecs[e])
         return np.real(toReturn)
 
     def PrintStateAtTime(self):
@@ -114,21 +114,26 @@ class MarkovChain:
         result = []
         for c, eigVal, eigVec in zip(consts, eigVals, eigVecs):
             result .append( str(c)+'*('+str(eigVal)+'^t)*'+str(eigVec)+' ' )
-        print ('P(t) = '+'+'.join(result))
+        print ('P(t) = '+'\n+'.join(result))
 
 if __name__ == '__main__':
     #Example
-    Mat = [[2./3,1./2],[1./3,1./2]]
-    iState = [1,0]
+   
+    Mat = [
+            [1./3,1./2,1./10],
+            [1./3,1./4,2./10],
+            [1./3,1./4,7./10]]
+    iState = [1,0,0]
+    
     x = MarkovChain(Mat,iState)
     print ('Initial state: ',x.initState)
-    print ('Probability matrix: ',x.ProbMatrix)
+    print ('Probability matrix:\n ',x.ProbMatrix)
     print ('Constants: ', x.Evaluation[0])
     print ('Eigenvalues: ', x.Evaluation[1])
     print ('Eigenvectors: ', x.Evaluation[2])
     print ('Equation with time: ')
     x.PrintStateAtTime()
-    print (x.StationaryState())
+    print ('Stationary state:',x.StationaryState())
 
 
 
