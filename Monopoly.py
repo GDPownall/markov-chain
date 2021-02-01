@@ -42,7 +42,7 @@ class Monopoly:
 
         print(self.markov.StationaryState())
         self.markov.PlotStationary('docs/MonopolyStationary.png')
-        self.markov.PlotOverTime('docs/MonopolyOverTime.gif',100, start_from = 1)
+        self.markov.PlotOverTime('docs/MonopolyOverTime.gif',40, start_from = 1, time_between_steps = 500)
 
 
 

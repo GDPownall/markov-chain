@@ -120,7 +120,7 @@ class MarkovChain:
         line = ax.plot(range(len(stationary)),stationary,linewidth=2)
         fig.savefig(outfile)
 
-    def PlotOverTime(self, outfile='out.gif', timesteps=20, start_from = 0):
+    def PlotOverTime(self, outfile='out.gif', timesteps=20, start_from=0, time_between_steps=200):
         fig, ax = plt.subplots()
         print('fig size: {0} DPI, size in inches {1}'.format(
             fig.get_dpi(), fig.get_size_inches()))
@@ -132,7 +132,7 @@ class MarkovChain:
             line.set_ydata(self.CalcStateAtTime(i))
             ax.set_xlabel(label)
             return line,ax
-        anim = FuncAnimation(fig, update, frames=np.arange(start_from,timesteps), interval=200)
+        anim = FuncAnimation(fig, update, frames=np.arange(start_from,timesteps), interval=time_between_steps)
         #plt.show()
         anim.save(outfile, dpi=100, writer='imagemagick')
 
