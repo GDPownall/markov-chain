@@ -15,7 +15,7 @@ def dice_roll_prob(n):
 
 class Monopoly:
     def __init__(self):
-        self.three_doubles_jail = True
+        self.three_doubles_jail = True 
 
         self.n_chance         = 16
         self.chance_locs      = [2,7,17,22,36]
@@ -102,7 +102,7 @@ class Monopoly_MonteCarlo(Monopoly):
         # Go to jail square
         arr2 = np.where(arr2==30,10,arr2)
         # Advance to x chance/comm chest
-        choose_advance  = np.random.choice(np.arange(0,self.n_chance),size = (1,self.num_players)) == 0
+        choose_advance  = np.random.choice(np.arange(0,self.n_chance),size = (1,self.num_players)) < len(self.chance_advances)
         advance_to_locs = np.random.choice(self.chance_advances, size = (1,self.num_players))
         arr2 = np.where(
                 np.isin(arr2,self.chance_locs)*choose_advance,
@@ -136,8 +136,9 @@ def PlotMonopolyComparison(outfolder='MonopolyComparison/', n_steps=40):
         fig.set_tight_layout(True)
         markov_state = mark.markov.CalcStateAtTime(n)
         monte_state  = monte.CalcStateAtTime(n)
-        line1 = ax.plot(range(len(markov_state)),markov_state,linewidth=2)
-        line2 = ax.plot(range(len(monte_state)),monte_state,linewidth=2)
+        line1 = ax.plot(range(len(markov_state)),markov_state,linewidth=2,label='Markov chain')
+        line2 = ax.plot(range(len(monte_state)),monte_state,linewidth=2,label='Monte carlo')
+        plt.legend(loc='upper right')
         fig.savefig(outfolder+str(n)+'.png')
         plt.close()
 
