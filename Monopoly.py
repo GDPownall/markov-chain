@@ -66,7 +66,6 @@ class Monopoly_MarkovChain(Monopoly):
         self.markov.PlotOverTime('docs/MonopolyOverTime.gif',40, start_from = 1, time_between_steps = 500)
 
 
-dice_roll_values       = [1,2,3,4,5,6]
 
 class Monopoly_MonteCarlo(Monopoly):
     def __init__(self, num_players=10):
@@ -77,15 +76,13 @@ class Monopoly_MonteCarlo(Monopoly):
         self.rolls2      = np.zeros((1,num_players),int)
 
     def advance(self):
-        print('===========')
-        print(self.game_states)
         prev_turn = self.game_states[-1,:]
 
         roll_sample = np.random.choice(
-                dice_roll_values,
+                [1,2,3,4,5,6],
                 size = (2,self.num_players))
         self.rolls1 = np.vstack([self.rolls1,roll_sample[0,:]])
-        self.rolls2 = np.vstack([self.rolls2,roll_sample[0,:]])
+        self.rolls2 = np.vstack([self.rolls2,roll_sample[1,:]])
 
         next_turn = prev_turn + roll_sample[0,:] + roll_sample[1,:]
         next_turn = self.replacements(next_turn)
@@ -108,9 +105,15 @@ class Monopoly_MonteCarlo(Monopoly):
         # Roll three doubles jail
         if self.three_doubles_jail and self.rolls1.shape[0] > 2:
             arr2 = np.where(
-                    np.all(rolls1[-3,:] == rolls2[-3,:],axis=0),
+                    np.all(self.rolls1[-3:,:] == self.rolls2[-3:,:],axis=0),
                     10,
                     arr2)
+   
+        #Subtract 40 from those which have looped around the board
+        arr2 = np.where(
+                arr2 > 39,
+                arr2 - 40,
+                arr2)
         return arr2
             
 
@@ -120,6 +123,6 @@ class Monopoly_MonteCarlo(Monopoly):
 if __name__ == '__main__':
     #x = Monopoly_MarkovChain()
     #x.plots()
-    #x = Monopoly_MonteCarlo()
-    #x.advance()
-    #x.advance()
+    monte = Monopoly_MonteCarlo()
+    for i in range(10):
+        monte.advance()
