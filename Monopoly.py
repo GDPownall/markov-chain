@@ -128,9 +128,9 @@ class Monopoly_MonteCarlo(Monopoly):
         counts = counts/sum(counts)
         return counts
 
-def PlotMonopolyComparison(outfolder='MonopolyComparison/', n_steps=40):
+def PlotMonopolyComparison(outfolder='MonopolyComparison/', n_steps=20):
     mark  = Monopoly_MarkovChain()
-    monte = Monopoly_MonteCarlo(100000)
+    monte = Monopoly_MonteCarlo(10000000)
     for n in range(n_steps):
         fig, ax = plt.subplots()
         fig.set_tight_layout(True)
@@ -139,12 +139,15 @@ def PlotMonopolyComparison(outfolder='MonopolyComparison/', n_steps=40):
         line1 = ax.plot(range(len(markov_state)),markov_state,linewidth=2,label='Markov chain')
         line2 = ax.plot(range(len(monte_state)),monte_state,linewidth=2,label='Monte carlo')
         plt.legend(loc='upper right')
+        plt.title('timestep '+str(n))
+        plt.xlabel('Position')
+        plt.ylabel('Probability')
         fig.savefig(outfolder+str(n)+'.png')
         plt.close()
 
 if __name__ == '__main__':
     x = Monopoly_MarkovChain()
-    print(x.markov.CalcStateAtTime(20))
+    x.plots()
     monte = Monopoly_MonteCarlo(100000)
     for i in range(10):
         monte.advance()

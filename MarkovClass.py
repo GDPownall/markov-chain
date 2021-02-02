@@ -117,6 +117,9 @@ class MarkovChain:
         stationary = self.StationaryState()
         fig, ax = plt.subplots()
         fig.set_tight_layout(True)
+        plt.title('Stationary state')
+        plt.xlabel('Position')
+        plt.ylabel('Probability')
         line = ax.plot(range(len(stationary)),stationary,linewidth=2)
         fig.savefig(outfile)
 
@@ -127,10 +130,12 @@ class MarkovChain:
         x = range(len(self.Evaluation[0]))
         y = self.CalcStateAtTime(start_from)
         line, = ax.plot(x,y,linewidth=2)
+        ax.set_xlabel('Position')
+        ax.set_ylabel('Probability')
         def update(i):
             label = 'timestep {0}'.format(i)
             line.set_ydata(self.CalcStateAtTime(i))
-            ax.set_xlabel(label)
+            ax.set_title(label)
             return line,ax
         anim = FuncAnimation(fig, update, frames=np.arange(start_from,timesteps), interval=time_between_steps)
         #plt.show()
