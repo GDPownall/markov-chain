@@ -5,7 +5,8 @@
 from MarkovClass import MarkovChain
 
 
-def GetGamblersRuin(initialState=100, probUp = 0.5, probDown = 0.5, upperLimit = 200, lowerLimit = 0):
+def GetGamblersRuin(initialState=100, probUp = 0.5, upperLimit = 200, lowerLimit = 0):
+    probDown = 1.-probUp
     nStates = upperLimit-lowerLimit+1
     initState = [0.]*nStates
     initState[initialState] = 1.
