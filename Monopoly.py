@@ -116,13 +116,23 @@ class Monopoly_MonteCarlo(Monopoly):
                 arr2)
         return arr2
             
+    def CalcStateAtTime(self,t):
+        while self.game_states.shape[0] < t+1:
+            self.advance()
 
+        state = self.game_states[t,:]
+        counts = []
+        for i in range(40):
+            counts.append((state==i).sum())
+        counts = counts/sum(counts)
+        return counts
 
 
 
 if __name__ == '__main__':
-    #x = Monopoly_MarkovChain()
-    #x.plots()
-    monte = Monopoly_MonteCarlo()
+    x = Monopoly_MarkovChain()
+    print(x.markov.CalcStateAtTime(20))
+    monte = Monopoly_MonteCarlo(100000)
     for i in range(10):
         monte.advance()
+    print(monte.CalcStateAtTime(20))
