@@ -2,6 +2,7 @@
 
 from MarkovClass import MarkovChain
 import numpy as np
+import matplotlib.pyplot as plt
 
 def dice_roll_prob(n):
     '''
@@ -127,7 +128,18 @@ class Monopoly_MonteCarlo(Monopoly):
         counts = counts/sum(counts)
         return counts
 
-
+def PlotMonopolyComparison(outfolder='MonopolyComparison/', n_steps=40):
+    mark  = Monopoly_MarkovChain()
+    monte = Monopoly_MonteCarlo(100000)
+    for n in range(n_steps):
+        fig, ax = plt.subplots()
+        fig.set_tight_layout(True)
+        markov_state = mark.markov.CalcStateAtTime(n)
+        monte_state  = monte.CalcStateAtTime(n)
+        line1 = ax.plot(range(len(markov_state)),markov_state,linewidth=2)
+        line2 = ax.plot(range(len(monte_state)),monte_state,linewidth=2)
+        fig.savefig(outfolder+str(n)+'.png')
+        plt.close()
 
 if __name__ == '__main__':
     x = Monopoly_MarkovChain()
@@ -136,3 +148,4 @@ if __name__ == '__main__':
     for i in range(10):
         monte.advance()
     print(monte.CalcStateAtTime(20))
+    PlotMonopolyComparison()
