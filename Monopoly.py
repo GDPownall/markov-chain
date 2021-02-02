@@ -93,8 +93,13 @@ class Monopoly_MonteCarlo(Monopoly):
         '''
         For a given array of positions, make replacements for go to jail, advance to ..., etc.
         '''
+        #Subtract 40 from those which have looped around the board
+        arr2 = np.where(
+                arr > 39,
+                arr - 40,
+                arr)
         # Go to jail square
-        arr2 = np.where(arr==30,10,arr)
+        arr2 = np.where(arr2==30,10,arr2)
         # Advance to x chance/comm chest
         choose_advance  = np.random.choice(np.arange(0,self.n_chance),size = (1,self.num_players)) == 0
         advance_to_locs = np.random.choice(self.chance_advances, size = (1,self.num_players))
@@ -109,11 +114,6 @@ class Monopoly_MonteCarlo(Monopoly):
                     10,
                     arr2)
    
-        #Subtract 40 from those which have looped around the board
-        arr2 = np.where(
-                arr2 > 39,
-                arr2 - 40,
-                arr2)
         return arr2
             
     def CalcStateAtTime(self,t):
