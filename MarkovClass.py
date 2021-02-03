@@ -47,8 +47,7 @@ class MarkovChain:
         else:
             iMat = np.array(iMat)
             if False in [len(row) == len(iMat) for row in iMat]:
-                print ('Matrix supplied to Markov Chain class not square')
-                raise MarkovError
+                raise ValueError('Matrix supplied to Markov Chain class not square')
             for colNum in range(len(iMat)):
                 column = iMat[:,colNum]
                 if (sum(column) - 1.)**2 > 0.000001:
