@@ -2,6 +2,7 @@
 \author{Gavin Pownall}
 \documentclass[12pt]{article}
 
+\usepackage{subfigure}
 \usepackage{amsmath}
 \usepackage{tikz}
 \usetikzlibrary{automata, positioning}
@@ -133,24 +134,44 @@ Using Markov chains, not only can this be calculated computationally, but you ca
 The ``GamblerRuin.gif'' file shows evolution of a state with time, where the gambler starts on 4 coins and cashes out at 10. 
 The patterns observed are as expected - the 0th iteration is a simple peak, the 1st iteration is two peaks either side that of the 0th iteration, and evolution follows that pattern as the probability slowly concentrates itself at 0 and 10.
 
-\subsection{Monopoly}
-
-The monopoly game can also be simulated using Markov chain analysis. In the Monopoly.py script, a simple setup is created with dice rolls, chance/community chest ``advance to'' cards and ``go to jail for three doubles in a row'' accounted for. The stationary state gives the optimal position for properties. 
-As has been observed elsewhere, the jail square is the most likely, followed by those around 7 squares afterward.
-The stationary state of the monopoly board is visualised in Fig. \ref{fig:monopoly}.
-
-\begin{figure}\label{fig:monopoly}
-	\centering
-	\includegraphics[width=0.6\textwidth]{MonopolyStationary.png}
-\end{figure}
-
-There are notable peaks and troughs. Peaks are at the positions of the ``advance to'' locations, and troughs are at the chance and community chest locations themselves. The biggest peak, however, is for the jail location, and a trough at the ``go to jail'' square as this is treated as a square that you cannot land on -- it sends you straight to the jail cell. The shape of the distribution follows a wave, with upward parts following the peaks, particularly after the jail location.
-
 \subsection{PageRank}
 
 One of the first algorithms used by the Google search engine was PageRank, which in its most simple form made use of Markov Chain analysis.
 Essentially, given a list of links, and the hyperlinks to the other pages contained within, how do you rank them?
 This algorithm builds a Markov Chain system where the probability of moving to another page is split equally into the hyperlinks, and the stationary state determines the ranking used for the search page.
 The function to compute this is given in the PageRankExample.py script.
+
+\subsection{Monopoly}
+
+The monopoly game can also be simulated using Markov chain analysis. In the Monopoly.py script, a simple setup is created with dice rolls, chance and community chest ``advance to'' cards and ``go to jail for three doubles in a row'' accounted for. The stationary state gives the optimal position for properties.
+As has been observed elsewhere, the jail square is the most likely, followed by those around 7 squares afterward.
+The stationary state of the monopoly board is visualised in Fig. \ref{fig:monopoly}.
+
+\begin{figure}
+        \centering
+        \includegraphics[width=0.6\textwidth]{MonopolyStationary.png}
+	\caption{The stationary state of the Monopoly game as calculated using Markov-Chain analysis.}
+	\label{fig:monopoly}
+\end{figure}
+
+There are notable peaks and troughs. Peaks are at the positions of the ``advance to'' locations, and troughs are at the chance and community chest locations themselves. The biggest peak, however, is for the jail location, and a trough at the ``go to jail'' square as this is treated as a square that you cannot land on -- it sends you straight to the jail cell. The shape of the distribution follows a wave, with upward parts following the peaks, particularly after the jail location.
+
+To validate this evaluation of Monopoly, an additional more rigorous Monte-Carlo simulation is also written in the Monopoly.py script. 
+This simulates the game in full for a number of players, and calculates the probability at any time based on the proportion of players occupying each state.
+In Fig. \ref{fig:monopoly_compare}, a comparison is made between the two simulations -- there is good agreement between the two.
+The time\_monopoly.py script compares the processing time and CPU usage of each simulation. It was found that for 40 timesteps and 100,000 Monte-Carlo players, the Monte-Carlo simulation took 100 times as long and used 10,000 times as much memory in RAM.
+
+\begin{figure}
+	\centering
+	\subfigure{\includegraphics[width=0.3\textwidth]{MonopolyComparison/0.png}}
+	\subfigure{\includegraphics[width=0.3\textwidth]{MonopolyComparison/1.png}}
+	\subfigure{\includegraphics[width=0.3\textwidth]{MonopolyComparison/2.png}}
+
+	\subfigure{\includegraphics[width=0.3\textwidth]{MonopolyComparison/5.png}}
+	\subfigure{\includegraphics[width=0.3\textwidth]{MonopolyComparison/10.png}}
+	\subfigure{\includegraphics[width=0.3\textwidth]{MonopolyComparison/19.png}}
+	\caption{A comparison of the Monte Carlo and Markov Chain simulation techniques for the Monopoly game at a range of timesteps.}
+	\label{fig:monopoly_compare}
+\end{figure}
 
 \end{document}
