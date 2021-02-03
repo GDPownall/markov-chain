@@ -109,7 +109,7 @@ class Monopoly_MonteCarlo(Monopoly):
                 advance_to_locs,
                 arr2)
         # Roll three doubles jail
-        if self.three_doubles_jail and self.rolls1.shape[0] > 2:
+        if self.three_doubles_jail and self.rolls1.shape[0] > 3:
             arr2 = np.where(
                     np.all(self.rolls1[-3:,:] == self.rolls2[-3:,:],axis=0),
                     10,

@@ -30,7 +30,7 @@ def GetGamblersRuin(initialState=100, probUp = 0.5, upperLimit = 200, lowerLimit
 
 
 if __name__ == '__main__':   
-    x = GetGamblersRuin(4,0.5,0.5,10,0)
+    x = GetGamblersRuin(4,0.5,10,0)
     print (x.StationaryState())
     x.PrintStateAtTime()
     print('\n')

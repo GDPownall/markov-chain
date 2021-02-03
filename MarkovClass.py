@@ -101,9 +101,11 @@ class MarkovChain:
 
     def StationaryState(self):
         consts, eigVals, eigVecs = self.Evaluation
-
-        e = np.argmin(np.abs(eigVals-1))
-        toReturn = consts[e]*np.array(eigVecs[e])
+        
+        stationary_args = np.abs(eigVals-1) < 0.000001
+        toReturn = np.zeros(len(eigVecs[0,:]))
+        for e in range(len(stationary_args)):
+            if stationary_args[e]: toReturn += consts[e]*np.array(eigVecs[e])
         return np.real(toReturn)
 
     def PrintStateAtTime(self):
