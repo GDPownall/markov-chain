@@ -43,7 +43,8 @@ class MarkovChain:
     def SetProbMatrix(self,iMat):
         if isinstance(iMat,type( None )):
             print ( 'Initialised with no probability matrix.')
-            self.ProbMatrix = None
+            self.ProbMatrix    = None
+            self.probMatrixSet = False
         else:
             iMat = np.array(iMat)
             if len(iMat.shape) != 2 or (iMat.shape[0] != iMat.shape[1]):
@@ -59,7 +60,8 @@ class MarkovChain:
     def SetInitState(self,initState):        
         if initState == None:
             print ('Initialised with no initial state')
-            self.initState = None
+            self.initState    = None
+            self.initStateSet = False
         else:
             if np.absolute(sum(initState)-1) > 0.000001:
                 raise ValueError('Initial state does not sum to one')
