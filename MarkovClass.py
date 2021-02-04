@@ -46,13 +46,12 @@ class MarkovChain:
             self.ProbMatrix = None
         else:
             iMat = np.array(iMat)
-            if False in [len(row) == len(iMat) for row in iMat]:
+            if len(iMat.shape) != 2 or (iMat.shape[0] != iMat.shape[1]):
                 raise ValueError('Matrix supplied to Markov Chain class not square')
-            for colNum in range(len(iMat)):
-                column = iMat[:,colNum]
-                if (sum(column) - 1.)**2 > 0.000001:
-                    print(sum(column))
-                    raise ValueError('Matrix column at position '+str(colNum)+' does not sum to one.')
+            total_cols = iMat.sum(axis=0)
+            sums_to_one = np.absolute((total_cols - 1)) < 0.000001
+            if not all(sums_to_one):
+                raise ValueError('Matrix column at position(s) '+str(np.argwhere(~sums_to_one).ravel())+' does not sum to one.')
             self.ProbMatrix = np.array(iMat)
             self.probMatrixSet = True
         if self.probMatrixSet and self.initStateSet: self.Evaluate()
@@ -62,8 +61,8 @@ class MarkovChain:
             print ('Initialised with no initial state')
             self.initState = None
         else:
-            if sum(initState) != 1.:
-                raise ValueError('Initial state needs to sum to one')
+            if np.absolute(sum(initState)) > 0.000001:
+                raise ValueError('Initial state does not sum to one')
             self.initState = np.array(initState)
             self.initStateSet = True
         if self.probMatrixSet and self.initStateSet: self.Evaluate()
