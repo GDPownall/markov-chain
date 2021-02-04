@@ -28,29 +28,27 @@ class Monopoly_MarkovChain(Monopoly):
         # Set up probability matrix
 
         prob_mat = [[0.]*40 for i in range(40)]
+        prob_three_doubles = 1/6**3
+
         for n in range(40):
             for m in range(2,13):
                 if n+m < 40: prob_mat[n+m][n]    = dice_roll_prob(m)
                 else:        prob_mat[n+m-40][n] = dice_roll_prob(m)
 
-        # Roll three doubles (probability 1/6**3), go to jail
-        if self.three_doubles_jail:
-            for n in range(40):
-                prob_mat[10][n] += (1/6)**3
+            # Roll three doubles (probability 1/6**3), go to jail
+            if self.three_doubles_jail:
                 for m in range(40):
-                    prob_mat[m][n] *= (1-(1/6)**3)
+                    prob_mat[m][n] *= (1-prob_three_doubles)
+                prob_mat[10][n] += prob_three_doubles
 
-        # Go to jail square
-        # Unoptimised second loop because this is a relatively short loop anyway
-        for n in range(40):
+            # Go to jail square
             prob_mat[10][n] += prob_mat[30][n]
             prob_mat[30][n] = 0
 
-        # Chance cards 
-        n_chance = self.n_chance 
-        chance_locs     = self.chance_locs 
-        chance_advances = self.chance_advances 
-        for n in range(40):
+            # Chance cards 
+            n_chance = self.n_chance 
+            chance_locs     = self.chance_locs 
+            chance_advances = self.chance_advances 
             for chance in chance_locs:
                 for advance in chance_advances:
                     p_advance_to = prob_mat[chance][n]/n_chance
@@ -128,7 +126,7 @@ class Monopoly_MonteCarlo(Monopoly):
         counts = counts/sum(counts)
         return counts
 
-def PlotMonopolyComparison(outfolder='MonopolyComparison/', n_steps=20):
+def PlotMonopolyComparison(outfolder='docs/MonopolyComparison/', n_steps=20):
     mark  = Monopoly_MarkovChain()
     monte = Monopoly_MonteCarlo(10000000)
     for n in range(n_steps):
