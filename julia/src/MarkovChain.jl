@@ -2,7 +2,7 @@
 
 struct MarkovChain
     mat::ProbMatrix
-    initial::AbstractArray
+    initial::Array{Real,1}
 
     function MarkovChain(mat,initial)
 	if sum(initial) != 1

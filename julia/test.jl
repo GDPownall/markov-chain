@@ -12,6 +12,6 @@ A = ProbMatrix(Mat)
 
 println(inv(A))
 
-init = [1 0]
+init = [1,0]
 
 x = MarkovChain(A,init)
