@@ -1,9 +1,5 @@
 # This file contains the struct for the probability matrix
 
-module ProbMatrixDef
-
-export ProbMatrix
-
 struct ProbMatrix
     data::AbstractArray
 
@@ -23,11 +19,3 @@ struct ProbMatrix
     end
 end
 
-
-Mat = [0.8 0.05 ; 0.2 0.95]
-
-A = ProbMatrix(Mat)
-
-export ProbMatrix
-
-end
