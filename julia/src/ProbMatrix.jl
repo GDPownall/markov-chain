@@ -25,4 +25,7 @@ ProbMatrix(data::AbstractArray{T,2}) where {T} = ProbMatrix{T}(data)
 # Define functions
 
 Base.size(m::ProbMatrix{T}) where T = size(m.data)
+Base.getindex(m::ProbMatrix{T}) where T = getindex(m.data)
 LinearAlgebra.factorize(m::ProbMatrix{T}) where T = factorize(m.data)
+LinearAlgebra.eigvals(m::ProbMatrix{T}) where T = eigvals(m.data)
+LinearAlgebra.eigvecs(m::ProbMatrix{T}) where T = eigvecs(m.data)
