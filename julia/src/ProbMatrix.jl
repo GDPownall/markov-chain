@@ -22,14 +22,12 @@ struct ProbMatrix
         new(data)
     end
 end
-"""
-function ProbMatrix(A::AbstractMatrix)
-    LinearAlgebra.checksquare(A)
-    return symmetric_type(typeof(A))(A, char_uplo(uplo))
-end
-"""
+
+
 Mat = [0.8 0.05 ; 0.2 0.95]
 
 A = ProbMatrix(Mat)
+
+export ProbMatrix
 
 end
