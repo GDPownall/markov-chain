@@ -6,9 +6,6 @@ struct ProbMatrix{T<:Real} <: AbstractArray{T,2}
         data
 
         function ProbMatrix{T}(data::AbstractArray{T,2}) where T<:Real
-                if ndims(data) != 2
-                        error("Probability matrix needs to be two-dimensional")
-                end
                 if size(data,1) != size(data,2)
                         error("Probability matrix needs to be square.")
                 end
@@ -23,7 +20,7 @@ end
 
 # Outer constructors
 
-ProbMatrix(data::Array{T,2}) where {T} = ProbMatrix{T}(data)
+ProbMatrix(data::AbstractArray{T,2}) where {T} = ProbMatrix{T}(data)
 
 # Define functions
 
