@@ -2,7 +2,9 @@ module MarkovChainModule
 
 export
 	ProbMatrix,
-	MarkovChain
+	MarkovChain,
+	EquationOfMotion,
+	stationarystate
 
 include("ProbMatrix.jl")
 include("MarkovChain.jl")
