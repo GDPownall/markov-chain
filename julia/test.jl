@@ -21,3 +21,8 @@ x = MarkovChain(A,init)
 
 eq = EquationOfMotion(x)
 println(stationarystate(eq))
+
+
+for i in 0:10
+	println(stateattime(eq,i))
+end

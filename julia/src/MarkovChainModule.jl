@@ -4,7 +4,8 @@ export
 	ProbMatrix,
 	MarkovChain,
 	EquationOfMotion,
-	stationarystate
+	stationarystate,
+	stateattime
 
 include("ProbMatrix.jl")
 include("MarkovChain.jl")

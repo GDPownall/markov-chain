@@ -44,3 +44,11 @@ function stationarystate(eq::EquationOfMotion)
 	end
 	return result
 end
+
+function stateattime(eq::EquationOfMotion, t::Int)
+	result = zeros(size(eq.eigvals))
+	for idx in 1:length(eq.constants)
+		result += eq.constants[idx]*(eq.eigvals[idx]^t)*eq.eigvecs[idx,:]
+	end
+	return result
+end
