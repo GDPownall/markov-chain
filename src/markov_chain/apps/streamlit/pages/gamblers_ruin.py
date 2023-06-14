@@ -6,8 +6,33 @@ from markov_chain.plot_chain import MarkovChainPlotter
 
 st.title("Simulating Gambler's Ruin through Eigenfactor Centrality")
 
-left_edge = st.number_input(label="Smallest value", value=0)
-right_edge = st.number_input(label="Largest value", min_value=left_edge, value=left_edge + 10)
+st.subheader("Description")
+
+st.text(
+    "Let's play a game.\n"
+    "You start with n coins. Each turn, you bet 1 coin to go to n+1 coins with probability p.\n"
+    "This of course means you move to n-1 coins with probability 1-p\n"
+    "You decide on a Largest value, at which point you cash out.\n"
+    "What is the probability that you make this value?\n"
+    "What is the probability that you hit zero?"
+)
+
+st.text("There is an analytical solution to this:")
+st.latex(r"P(failure|n) = \frac{(q/p)^n - 1}{(q/p)^M - 1)}")
+st.text("Where q=1-p and M is the cash-out number.")
+st.text("The solution where p=0.5 is:")
+st.latex("P(failure|n) = 1-n/M")
+
+
+st.subheader("Result using Markov chains")
+
+st.text(
+    "Markov chains give the same result for their stationary state,\n"
+    "but have the additional benefit of also calculating intermediate steps!"
+)
+
+left_edge = 0
+right_edge = st.number_input(label="Largest value", min_value=2, value=10)
 start_position = st.slider(
     label="Start position",
     min_value=left_edge + 1,
