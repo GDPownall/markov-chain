@@ -60,3 +60,58 @@ def plot_monopoly_comparison(simulators: Dict[str, MonopolySimulationBase], step
 
     fig.show()
     return fig
+
+
+def animate_monopoly_comparison(
+    simulators: Dict[str, MonopolySimulationBase], timesteps: int = 20, time_between_steps: int = 200
+) -> go.Figure:
+    """Create an animation of a comparison between a list of simulators over time"""
+
+    frames = []
+
+    for i in range(timesteps):
+        frame_data = []
+        max_value = max(
+            [max(sim.state_at_time(i)) for sim in simulators.values()]
+        )  # find the maximum value across all simulators at this time
+        for label, sim in simulators.items():
+            state = sim.state_at_time(i) / max_value
+            frame_data.append(go.Scatter(x=list(range(len(state))), y=state, mode="lines", name=label))
+        frames.append(go.Frame(data=frame_data))
+
+    fig = go.Figure(
+        data=frames[0]["data"],
+        layout=go.Layout(
+            xaxis=dict(range=[0, max([len(sim.state_at_time(0)) for sim in simulators.values()])], autorange=False),
+            yaxis=dict(range=[0, 1], autorange=False),
+            updatemenus=[
+                dict(
+                    type="buttons",
+                    buttons=[
+                        dict(
+                            label="Play",
+                            method="animate",
+                            args=[
+                                None,
+                                {
+                                    "frame": {"duration": time_between_steps, "redraw": True},
+                                    "fromcurrent": True,
+                                    "transition": {"duration": time_between_steps},
+                                },
+                            ],
+                        )
+                    ],
+                )
+            ],
+            title="State Over Time",
+            xaxis_title="Position",
+            yaxis_title="Probability/Max_probability",
+            autosize=False,
+            width=500,
+            height=500,
+            margin=dict(l=50, r=50, b=100, t=100, pad=4),
+        ),
+        frames=frames,
+    )
+
+    return fig
