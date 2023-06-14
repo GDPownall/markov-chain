@@ -18,6 +18,11 @@ st.text(
     "In this page, it is demonstrated that the results from Eigenfactor Centrality mimic Monte Carlo."
 )
 
+st.text(
+    "Note in the plots below that the monopoly board has been flattened\n"
+    "'GO' is at position 0, 'Jail' is at position 10, etc."
+)
+
 three_doubles_jail = st.checkbox(
     label="Three doubles to jail?",
     value=True,
@@ -34,8 +39,6 @@ mc = MonopolyMonteCarlo(settings=settings, num_players=number_of_monte_carlo_age
 
 st.plotly_chart(MarkovChainPlotter.plot_stationary(markov.markov))
 
-max_animated_timesteps = 40
-
 start_RAM = psutil.virtual_memory().used
 st.text(f"RAM at start: {start_RAM/10**6}")
 
@@ -50,10 +53,20 @@ mc.state_at_time(40)
 st.text(f"Time to calculate state at 40 iterations with Monte Carlo: {time.time()-start_time}s")
 st.text(f"RAM usage:{(psutil.virtual_memory().used - used_RAM - start_RAM)*10**-6}MB")
 
+n_frames = st.number_input(
+    label="Number of frames", value=30, min_value=1, help="Number of frames to show in the below animation"
+)
+time_between_steps = st.number_input(
+    label="Time between frames (ms)",
+    value=200,
+    min_value=1,
+    help="Amount of time between frames in the below animation in milliseconds",
+)
+
 comparison = animate_monopoly_comparison(
     simulators={"Eigenfactor centrality": markov, "Monte carlo": mc},
-    timesteps=max_animated_timesteps,
-    time_between_steps=200,
+    timesteps=n_frames,
+    time_between_steps=time_between_steps,
 )
 st.plotly_chart(comparison)
 
