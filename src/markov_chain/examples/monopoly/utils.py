@@ -5,8 +5,8 @@ from typing import Dict
 from typing import List
 from typing import Optional
 
-import matplotlib.pyplot as plt
 import numpy as np
+import plotly.graph_objects as go
 
 
 @dataclass
@@ -40,15 +40,23 @@ class MonopolySimulationBase(ABC):
         """Return state at time"""
 
 
-def plot_monopoly_comparison(simulators: Dict[str, MonopolySimulationBase], step: int = 20) -> plt.Figure:
+def plot_monopoly_comparison(simulators: Dict[str, MonopolySimulationBase], step: int = 20) -> go.Figure:
     """Plot a comparison between a list of simulators at a given timestep"""
-    fig, ax = plt.subplots()
-    fig.set_tight_layout(True)
+    fig = go.Figure()
+
     for label, sim in simulators.items():
         state = sim.state_at_time(step)
-        ax.plot(range(len(state)), state, linewidth=2, label=label)
-    plt.legend(loc="upper right")
-    plt.title(f"timestep {step}")
-    plt.xlabel("Position")
-    plt.ylabel("Probability")
+        fig.add_trace(go.Scatter(x=list(range(len(state))), y=state, mode="lines", name=label))
+
+    fig.update_layout(
+        title=f"timestep {step}",
+        xaxis_title="Position",
+        yaxis_title="Probability",
+        autosize=False,
+        width=500,
+        height=500,
+        margin=dict(l=50, r=50, b=100, t=100, pad=4),
+    )
+
+    fig.show()
     return fig
