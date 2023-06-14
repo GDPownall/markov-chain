@@ -116,7 +116,7 @@ class MarkovChain:
         stationary_args = np.isclose(eig_vals, 1)
         if stationary_args.sum() == 1:
             e = np.where(stationary_args)[0][0]
-            stationary_state = eig_vecs[e, :]
+            stationary_state = np.real(eig_vecs[e, :])
             return stationary_state / stationary_state.sum()
         if consts is None:
             raise RuntimeError(
