@@ -94,7 +94,11 @@ class MarkovChain:
 
     def state_at_time(self, t: int) -> np.ndarray:
         """Get the state at time t"""
-        consts, eig_vals, eig_vecs = self._evaluation
+        self._evaluate()
+        consts = self._evaluation.constants
+        eig_vals = self._evaluation.eigenvalues
+        eig_vecs = self._evaluation.eigenvectors
+
         if consts is None:
             raise RuntimeError("Cannot calculate state at specific time without an initial state")
         result = np.zeros(eig_vecs.shape[0])
@@ -104,7 +108,10 @@ class MarkovChain:
 
     def stationary_state(self) -> np.ndarray:
         """Calculate the stationary state"""
-        consts, eig_vals, eig_vecs = self._evaluation
+        self._evaluate()
+        consts = self._evaluation.constants
+        eig_vals = self._evaluation.eigenvalues
+        eig_vecs = self._evaluation.eigenvectors
 
         stationary_args = np.isclose(eig_vals, 1)
         if stationary_args.sum() == 1:
