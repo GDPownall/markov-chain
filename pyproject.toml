@@ -123,7 +123,13 @@ testpaths = [
 ]
 
 [tool.coverage.run]
-omit = ["*/tests/*"]    # Remove test files from coverage run.
+omit = [
+  "*/tests/*",
+  "src/markov_chain/apps/*"
+]    # Remove test files and apps from coverage run.
 
 [tool.coverage.report]
-omit = ["*/tests/*"]    # Remove test files from coverage report.
+omit = [
+  "*/tests/*",
+  "src/markov_chain/apps/*"
+]    # Remove test files and apps from coverage report.

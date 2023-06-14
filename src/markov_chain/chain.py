@@ -84,6 +84,7 @@ class MarkovChain:
 
     @staticmethod
     def _renorm_eigvectors(eig_vecs: np.ndarray) -> np.ndarray:
+        """Renormalise such that the largest value is 1"""
         # Find renorm values. Not as simple as just finding max, has to deal with negative numbers too.
         maxmin = np.array([np.max(eig_vecs, axis=1), np.min(eig_vecs, axis=1)])
         take_val = np.argmax(np.abs(maxmin), axis=0)
