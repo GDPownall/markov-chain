@@ -13,8 +13,8 @@ from markov_chain.plot_chain import MarkovChainPlotter
 st.title("Simulating monopoly probability states using Eigenfactor Centrality and Monte Carlo")
 
 st.text(
-    "The monopoly game can be simulated as a network with an agent randomly hopping between states."
-    "This makes Eigenfactor Centrality perfect."
+    "The monopoly game can be simulated as a network with an agent randomly hopping between states.\n"
+    "This makes Eigenfactor Centrality perfect.\n"
     "In this page, it is demonstrated that the results from Eigenfactor Centrality mimic Monte Carlo."
 )
 
@@ -59,12 +59,12 @@ st.plotly_chart(comparison)
 
 st.subheader("Why are there differences?")
 st.text(
-    "Firstly, note that monte-carlo is always imprecise. "
+    "Firstly, note that monte-carlo is always imprecise.\n "
     "Even at 100,000 simulations, there are still noticeable differeces at times."
 )
 st.text(
-    "Secondly, if the three-rolls-jail is in place, Eigenfactor Centrality cannot account for this"
-    "as it assumes that each hop is independent. A small factor of (1/6)**3 is included to account for it,"
-    "but in the first few turns this leads to an overestimation of the probability of going to jail."
+    "Secondly, if the three-rolls-jail is in place, Eigenfactor Centrality cannot account for this\n"
+    "as it assumes that each hop is independent. A small factor of (1/6)**3 is included to account for it,\n"
+    "but in the first few turns this leads to an overestimation of the probability of going to jail.\n"
     "By the time we reach the steady state, this difference vanishes."
 )
