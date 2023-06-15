@@ -1,5 +1,6 @@
 import time
 
+import pandas as pd
 import psutil
 import streamlit as st
 
@@ -29,29 +30,35 @@ three_doubles_jail = st.checkbox(
     help="Tick if you want to include the rule that three doubles in a row sends the agent to jail.",
 )
 
-number_of_monte_carlo_agents = st.number_input(label="Number of monte carlo simulations", value=100, min_value=1)
+number_of_monte_carlo_agents = st.number_input(label="Number of monte carlo simulations", value=100000, min_value=1)
 
 settings = DefaultMonopolySettings
 settings.three_doubles_jail = three_doubles_jail
 
-markov = MonopolyMarkovChain(settings=settings)
-mc = MonopolyMonteCarlo(settings=settings, num_players=number_of_monte_carlo_agents)
-
-st.plotly_chart(MarkovChainPlotter.plot_stationary(markov.markov))
 
 start_RAM = psutil.virtual_memory().used
-st.text(f"RAM at start: {start_RAM/10**6}")
-
 start_time = time.time()
+
+markov = MonopolyMarkovChain(settings=settings)
 markov.state_at_time(40)
-st.text(f"Time to calculate state at 40 iterations with Markov Chain: {time.time()-start_time}s")
-used_RAM = psutil.virtual_memory().used - start_RAM
-st.text(f"RAM usage: {used_RAM*10**-6}MB")
+markov_time = time.time() - start_time
+markov_used_RAM = psutil.virtual_memory().used - start_RAM
 
 start_time = time.time()
+mc = MonopolyMonteCarlo(settings=settings, num_players=number_of_monte_carlo_agents)
 mc.state_at_time(40)
-st.text(f"Time to calculate state at 40 iterations with Monte Carlo: {time.time()-start_time}s")
-st.text(f"RAM usage:{(psutil.virtual_memory().used - used_RAM - start_RAM)*10**-6}MB")
+mc_time = time.time() - start_time
+mc_used_ram = psutil.virtual_memory().used - markov_used_RAM - start_RAM
+
+
+df = pd.DataFrame(
+    {"Time 40 steps (s)": [markov_time, mc_time], "Memory (B)": [markov_used_RAM, mc_used_ram]},
+    index=["Markov", "Monte Carlo"],
+)
+df["Memory (MB)"] = df["Memory (B)"] * 10**-6
+st.table(df[["Time 40 steps (s)"]])
+
+st.plotly_chart(MarkovChainPlotter.plot_stationary(markov.markov))
 
 n_frames = st.number_input(
     label="Number of frames", value=30, min_value=1, help="Number of frames to show in the below animation"
